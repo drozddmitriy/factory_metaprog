@@ -22,13 +22,9 @@ class Factory
     Class.new do
       attr_accessor(*arguments)
 
-      define_method :attributes do
-        arguments
-      end
-
       define_method :initialize do |*arg|
-        if attributes.count == arg.count
-          hash = attributes.zip(arg)
+        if arguments.count == arg.count
+          hash = arguments.zip(arg)
           hash.each do |key, value|
             instance_variable_set("@#{key}", value)
           end
@@ -89,3 +85,5 @@ class Factory
     end
   end
 end
+
+binding.pry
