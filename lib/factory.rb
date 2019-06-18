@@ -18,15 +18,15 @@
 require 'pry'
 
 class Factory
-  def self.new(*arguments, &block)
+  def self.new(*arguments, &blocks)
     if arguments.first.is_a? String
-      const_set(arguments.shift.capitalize, new(*arguments, &block))
+      const_set(arguments.shift.capitalize, new(*arguments, &blocks))
     else
-      build_class(*arguments, &block)
+      build_class(*arguments, &blocks)
     end
   end
 
-  def self.build_class(*arguments, &block)
+  def self.build_class(*arguments, &blocks)
     Class.new do
       attr_accessor(*arguments)
 
@@ -74,7 +74,7 @@ class Factory
       end
 
       define_method :members do
-        instance_variables.to_a
+        arguments
       end
 
       define_method :values_at do |*args|
@@ -89,7 +89,7 @@ class Factory
         (self.class == object.class) && (to_a == object.to_a)
       end
 
-      class_eval(&block) if block_given?
+      class_eval(&blocks) if block_given?
       alias_method :size, :length
       alias_method :eql?, :==
     end
