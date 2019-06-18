@@ -19,6 +19,14 @@ require 'pry'
 
 class Factory
   def self.new(*arguments, &block)
+    if arguments.first.is_a? String
+      const_set(arguments.shift.capitalize, new(*arguments, &block))
+    else
+      build_class(*arguments, &block)
+    end
+  end
+
+  def self.build_class(*arguments, &block)
     Class.new do
       attr_accessor(*arguments)
 
@@ -85,5 +93,3 @@ class Factory
     end
   end
 end
-
-binding.pry
