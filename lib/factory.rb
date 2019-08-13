@@ -15,8 +15,6 @@
 # - values_at
 # - ==, eql?
 
-require 'pry'
-
 class Factory
   def self.new(*arguments, &blocks)
     if arguments.first.is_a? String
@@ -31,13 +29,11 @@ class Factory
       attr_accessor(*arguments)
 
       define_method :initialize do |*arg|
-        if arguments.count == arg.count
-          hash = arguments.zip(arg)
-          hash.each do |key, value|
-            instance_variable_set("@#{key}", value)
-          end
-        else
-          raise ArgumentError, 'Wrong number of arguments'
+        raise ArgumentError, 'Wrong number of arguments' unless arguments.count == arg.count
+
+        hash = arguments.zip(arg)
+        hash.each do |key, value|
+          instance_variable_set("@#{key}", value)
         end
       end
 
