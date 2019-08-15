@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 require_relative '../lib/factory'
+require_relative './support/factory_helper'
+
+RSpec.configure do |c|
+  c.include FactoryHelper
+end
 
 RSpec.describe 'Factory' do
-  def constants_include
-    Object.send(:remove_const, :Customer) if Object.constants.include?(:Customer)
-  end
 
   before { constants_include }
 
