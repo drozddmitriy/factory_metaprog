@@ -8,7 +8,6 @@ RSpec.configure do |c|
 end
 
 RSpec.describe 'Factory' do
-
   before { constants_include }
 
   context 'creates factory in a namespace' do
@@ -81,40 +80,63 @@ RSpec.describe 'Factory' do
     end
   end
 
-  context 'method' do
+  context '.length(size)' do
+    let(:joe) { Customer.new('Joe Smith', '123 Maple, Anytown NC', 12_345) }
+
+    before { Customer = Factory.new(:name, :address, :zip) }
+
+    it do
+      expect(joe.length).to eq(3)
+      expect(joe.size).to eq(3)
+    end
+  end
+
+  context '.each' do
     let(:joe) { Customer.new('Joe Smith', '123 Maple, Anytown NC', 12_345) }
     let(:each_elements) { [] }
 
     before { Customer = Factory.new(:name, :address, :zip) }
 
-    it 'length (size)' do
-      expect(joe.length).to eq(3)
-      expect(joe.size).to eq(3)
-    end
-
-    it 'each' do
+    it do
       joe.each { |x| each_elements << x }
-
       expect(each_elements).to match_array(['Joe Smith', '123 Maple, Anytown NC', 12_345])
     end
+  end
 
-    it 'each_pair' do
+  context '.each_pair' do
+    let(:joe) { Customer.new('Joe Smith', '123 Maple, Anytown NC', 12_345) }
+    let(:each_elements) { [] }
+
+    before { Customer = Factory.new(:name, :address, :zip) }
+
+    it do
       joe.each_pair { |name, value| each_elements << "#{name} => #{value}" }
-
       expect(each_elements).to match_array(['name => Joe Smith', 'address => 123 Maple, Anytown NC', 'zip => 12345'])
     end
+  end
 
-    it 'members' do
-      expect(joe.members).to match_array(%i[name address zip])
-    end
+  context '.members' do
+    let(:joe) { Customer.new('Joe Smith', '123 Maple, Anytown NC', 12_345) }
 
-    it 'to_a' do
-      expect(joe.to_a[1]).to eq('123 Maple, Anytown NC')
-    end
+    before { Customer = Factory.new(:name, :address, :zip) }
 
-    it 'values_at' do
-      expect(joe.values_at(0, 2)).to eq(['Joe Smith', 12_345])
-    end
+    it { expect(joe.members).to match_array(%i[name address zip]) }
+  end
+
+  context '.to_a' do
+    let(:joe) { Customer.new('Joe Smith', '123 Maple, Anytown NC', 12_345) }
+
+    before { Customer = Factory.new(:name, :address, :zip) }
+
+    it { expect(joe.to_a[1]).to eq('123 Maple, Anytown NC') }
+  end
+
+  context '.values_at' do
+    let(:joe) { Customer.new('Joe Smith', '123 Maple, Anytown NC', 12_345) }
+
+    before { Customer = Factory.new(:name, :address, :zip) }
+
+    it { expect(joe.values_at(0, 2)).to eq(['Joe Smith', 12_345]) }
   end
 
   context '.dig' do

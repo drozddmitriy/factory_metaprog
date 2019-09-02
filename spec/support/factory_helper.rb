@@ -1,7 +1,5 @@
 module FactoryHelper
   def constants_include
-    if Object.constants.include?(:Customer)
-      Object.send(:remove_const, :Customer)
-    end
+    Object.send(:remove_const, :Customer) if Object.constants.include?(:Customer)
   end
 end
